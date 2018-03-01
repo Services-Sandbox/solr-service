@@ -1,0 +1,4 @@
+FROM solr
+ENV AUTHOR=cyu
+
+EXPOSE 8983
