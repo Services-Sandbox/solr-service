@@ -1,0 +1,56 @@
+# small linux distribution 
+RUN alpine
+
+# install java
+
+sudo apt-get update
+sudo apt-get install default-jre -y
+sudo apt-get install default-jdk -y
+
+# installing solr manually... user may need to be logged in as sudo
+# see http://www.apache.org/dyn/closer.lua/lucene/solr/7.2.1 for other versions
+# [https://www.digitalocean.com/community/tutorials/how-to-install-solr-on-ubuntu-14-04]
+
+mkdir /usr/java
+ln -s /usr/lib/jvm/java-1.8.0-openjdk-amd64 /usr/java/default
+
+cd /opt
+wget http://httpd-mirror.sergal.org/apache/lucene/solr/7.2.1/solr-7.2.1.tgz --no-proxy
+tar -xvf solr-7.2.1.tgz
+cp -R solr-7.2.1/ /opt/solr/
+cd /opt/solr/bin
+./solr start -p 8983 -force
+
+sudo useradd -d /opt/solr -s /sbin/false solr
+sudo chown solr:solr -R /opt/solr
+
+# list of commands for solr
+# NOTES:
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#/opt/solr/bin/solr delete -c new_core
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# installing apache tika manually... [https://notesfromrex.wordpress.com/2015/02/09/install-apache-tika-on-debian/]
+
+cd /opt
+wget http://apache.forsale.plus/tika/tika-1.17-src.zip --no-proxy
+unzip -qq tika-1.17-src.zip
+cp -R tika-1.17 tika
+
+# install apache maven ... software project management tool
+cd /opt
+wget http://mirror.csclub.uwaterloo.ca/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.zip --no-proxy
+unzip -qq apache-maven-3.5.2-bin.zip
+cp -R apache-maven-3.5.2 maven
+
+
+cd /opt/tika/
+/opt/maven/bin/mvn install
+
+
+# copy all the jar files to the library
+rm /opt/solr/contrib/extraction/lib/tika-core-1.16.jar && cp /opt/tika/tika-core/target/tika-core-1.17.jar /opt/solr/contrib/extraction/lib/
+rm /opt/solr/contrib/extraction/lib/tika-parsers-1.16.jar && cp /opt/tika/tika-core/target/tika-parsers-1.17.jar /opt/solr/contrib/extraction/lib/
+
+# curl "http://localhost:8983/solr/tika-core2/update/extract?stream.file=/sites/data/10220000/10223804/file/1429532484ex 11 - iw31 - capital wo w wbse reference.docx&stream.contentType=application/msword&literal.id=GCconnex2.docx"
