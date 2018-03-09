@@ -1,0 +1,8 @@
+services:
+  - docker
+  - ubuntu
+install:
+  - docker build -t solr-service .
+  - docker run -d -p 127.0.0.1:8983:8983 --name solr-service
+script:
+  - docker ps | grep -q solr-service
