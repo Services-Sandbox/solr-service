@@ -21,12 +21,12 @@ ADD solr /opt/solr
 # installing apache tika manually
 # https://notesfromrex.wordpress.com/2015/02/09/install-apache-tika-on-debian/
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ADD tika /opt/tika
+#ADD tika /opt/tika
 
 
 # install apache maven ... software project management tool
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ADD maven /opt/maven
+#ADD maven /opt/maven
 
 #http://coder1.com/articles/easily-spin-solr-instances-docker
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
