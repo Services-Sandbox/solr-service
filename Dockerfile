@@ -2,12 +2,12 @@
 FROM phusion/baseimage 
 
 # install java
-RUN apt-get update
-RUN apt-get install default-jre -y
-RUN apt-get install default-jdk -y
-RUN apt-get install wget -y
-RUN apt-get install unzip -y
-RUN apt-get install lsof -y
+RUN apt-get -qq update
+RUN apt-get -qq install default-jre -y
+RUN apt-get -qq install default-jdk -y
+RUN apt-get -qq install wget -y
+RUN apt-get -qq install unzip -y
+RUN apt-get -qq install lsof -y
 
 # installing java
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -20,7 +20,7 @@ RUN ln -s /usr/lib/jvm/java-1.8.0-openjdk-amd64 /usr/java/default
 # https://www.digitalocean.com/community/tutorials/how-to-install-solr-on-ubuntu-14-04
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RUN wget http://httpd-mirror.sergal.org/apache/lucene/solr/7.2.1/solr-7.2.1.tgz --no-proxy -q
-RUN tar -xvf solr-7.2.1.tgz
+RUN tar -xf solr-7.2.1.tgz
 RUN mv solr-7.2.1/ /opt/solr/
 
 # transfer the solr core into the solr engine
@@ -41,7 +41,7 @@ RUN wget http://mirror.csclub.uwaterloo.ca/apache/maven/maven-3/3.5.2/binaries/a
 RUN unzip -qq apache-maven-3.5.2-bin.zip
 RUN mv apache-maven-3.5.2 /opt/maven/
 WORKDIR /opt/tika/ 
-RUN /opt/maven/bin/mvn install -Dmaven.test.skip=true
+RUN /opt/maven/bin/mvn install -Dmaven.test.skip=true -q
 
 
 # http://coder1.com/articles/easily-spin-solr-instances-docker
