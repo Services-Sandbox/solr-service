@@ -41,7 +41,7 @@ RUN wget http://mirror.csclub.uwaterloo.ca/apache/maven/maven-3/3.5.2/binaries/a
 RUN unzip -qq apache-maven-3.5.2-bin.zip
 RUN mv apache-maven-3.5.2 /opt/maven/
 WORKDIR /opt/tika/ 
-RUN /opt/maven/bin/mvn install
+RUN /opt/maven/bin/mvn install -Dmaven.test.skip=true
 
 
 # http://coder1.com/articles/easily-spin-solr-instances-docker
