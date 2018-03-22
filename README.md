@@ -5,4 +5,7 @@ https://www.digitalocean.com/community/tutorials/docker-explained-using-dockerfi
 http://bencane.com/2016/01/11/using-travis-ci-to-test-docker-builds/
 https://techoverflow.net/2013/10/22/docker-remove-all-images-and-containers/
 
+to clear caches in database
+http://localhost/update.php
+
 
