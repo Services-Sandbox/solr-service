@@ -11,6 +11,8 @@ RUN apt-get -qq install lsof -y
 RUN apt-get -qq install nano -y
 RUN apt-get -qq -y install tar
 RUN apt-get -qq -y install cron
+RUN apt-get -qq -y install zip
+RUN apt-get -qq -y install unzip
 #RUN apt-get -qq -y install groovy
 
 
@@ -19,11 +21,11 @@ RUN apt-get -qq -y install cron
 #echo 'RUN source ~/.profile' >> Dockerfile
 #echo "RUN yes | sdk install groovy" >> Dockerfile
 
-
-RUN curl -s get.sdkman.io | bash && source "$HOME/.sdkman/bin/sdkman-init.sh"
-RUN source ~/.profile
-RUN yes | sdk install groovy
-RUN groovy -version
+#temp
+#RUN curl -s get.sdkman.io | bash && source "$HOME/.sdkman/bin/sdkman-init.sh"
+#RUN source ~/.profile
+#RUN yes | sdk install groovy
+#RUN groovy -version
 
 
 # installing java
