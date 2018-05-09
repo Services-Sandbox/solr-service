@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr
+
+# change the type if a loadbalancer is used
+spec:
+  type: NodePort
+  ports:
+  - port: 8983
+  selector:
+    app: solr

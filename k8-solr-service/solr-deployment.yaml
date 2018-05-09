@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+# deployment name or any labels associated with it
+metadata:
+  name: solr-deployment
+  
+# specifications for this deployment (same as pods)
+spec:
+  selector:
+    matchLabels:
+      app: solr
+
+  # run 2 pods matching the template
+  #replicas: 2
+
+  # create pods using the pod definition in this template
+  template:
+    # the name is not included, it is generated from deployment name
+    metadata:
+      labels:
+        app: solr
+
+    spec:
+      containers:
+      - name: solr-service
+        image: pandurx/solr-service:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8983
