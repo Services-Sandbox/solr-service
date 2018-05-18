@@ -17,13 +17,14 @@ function solr_api_init() {
 	// http://192.168.245.130/gcconnex/services/api/rest/json/?method=get.group_list
  
 
+	// @TODO will need authentication mechanism for this
 	elgg_ws_expose_function(
 		'delete.updated_index_list',
 		'delete_updated_index_list',
 		[
 			'guids' => [
 				'type' => 'array',
-				'required' => true,
+				'required' => false,
 				'description' => 'deletes records based on collection of entity guids'
 			]
 		],
@@ -41,14 +42,14 @@ function solr_api_init() {
         'get_entity_list',
         [
             'type' => [
-                    'type' => 'string',
-                    'required' => true,
-                    'description' => 'the type of entity in string format',
+                'type' => 'string',
+                'required' => true,
+                'description' => 'the type of entity in string format',
             ],
             'subtype' => [
-                    'type' => 'string',
-                    'required' => false,
-                    'description' => 'the subtype of entity in string format, not required',
+                'type' => 'string',
+                'required' => false,
+                'description' => 'the subtype of entity in string format, not required',
             ],
 
         ],
@@ -72,7 +73,13 @@ function solr_api_init() {
 	elgg_ws_expose_function(
         'get.group_list',
         'get_group_list',
-        null,
+        [
+        	'offset' => [
+        		'type' => 'int',
+        		'required' => true,
+        		'description' => 'api loads 20 groups at a time'
+        	]
+        ],
         'retrieves a group list',
         'GET',
         false,
@@ -91,8 +98,28 @@ function solr_api_init() {
 }
  
 
-function delete_updated_index_list($event, $type, $object) {
-	return false;
+function delete_updated_index_list($guids) {
+
+	$ids = array();
+	foreach ($guids as $guid) {
+
+		error_log(".... guid array: " . $guid);
+
+		if (is_numeric($guid)) {
+			error_log("guid is an int");
+			$ids[] = "id = {$guid}";
+		}
+
+	}
+	error_log("the size is.. " . sizeof($ids));
+	if (sizeof($ids) > 0) {
+		$ids = implode(" OR ",$ids);
+		$query = "DELETE FROM deleted_object_tracker WHERE {$ids}";
+		error_log("query: " . $query);
+		$result = delete_data($query);
+	}
+
+	return "ehhh";
 }
 
 
@@ -142,12 +169,12 @@ function get_list_of_deleted_records() {
 
 	return $arr;
 }
-
+ 
 function get_user_list() {
 
 	$users = elgg_get_entities(array(
 		'type' => 'user',
-		'limit' => 15
+		'limit' => 20
 	));
 
 	foreach ($users as $user) {
@@ -170,12 +197,18 @@ function get_user_list() {
     return $arr;
 }
 
-function get_group_list() {
+function get_group_list($offset) {
+
+	error_log("group list : {$offset}");
+	$query = "SELECT COUNT(guid) FROM elgggroups_entity;";
+	$offset = "";
 
 	$groups = elgg_get_entities(array(
 		'type' => 'group',
-		'limit' => 15
+		'limit' => 20
 	));
+
+	$arr[] = array('total_groups' => 50);
 
 	foreach ($groups as $group) {
 
@@ -196,6 +229,8 @@ function get_group_list() {
 			$description_array['en'] = $group->description;
 			$description_array['fr'] = $group->description;
 		}
+
+
 
 		$arr[] = array(
 			'guid' => $group->getGUID(),

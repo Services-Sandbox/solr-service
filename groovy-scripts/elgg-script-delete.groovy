@@ -15,8 +15,11 @@ def slurper = new JsonSlurper()
 def api_response = slurper.parseText(apiURL.text)
 
 def list_of_documents_to_delete = []
-
+def guids = ""
 def results = api_response.result
+
+def is_first = true
+
 for (result in results) {
 
 	def xml_string = "<delete><id>$result.guid</id></delete>"
@@ -26,11 +29,13 @@ for (result in results) {
 	println process
 
 	def responses = new XmlSlurper().parseText(process)
-
 	def response_text = responses.lst.find { it.'@name' == 'error'}.str.text()
+	
 	if (response_text == '') {
-		println "remove [$result.guid] $response_text "
 		list_of_documents_to_delete.push(result.guid)
+		guids = (is_first) ? guids + "guids[]=$result.guid" : guids + "&guids[]=$result.guid"
+		is_first = false
+
 	}
 
 	println "----------------------"
@@ -38,7 +43,11 @@ for (result in results) {
 }
 
 println "--- clean up --- >>> " + list_of_documents_to_delete
+println "sending... $guids"
+
+def process = [ 'bash', '-c', "curl -X POST -d '" + guids + "' http://192.168.1.18/gcconnex/services/api/rest/json/?method=delete.updated_index_list" ].execute().text
 
 
+println process
 
  

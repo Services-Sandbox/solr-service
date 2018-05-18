@@ -107,21 +107,36 @@
       trailing underscores (e.g. _version_) are reserved.
    -->
 
-   <uniqueKey>guid</uniqueKey>
+
+
+   <field name="guid"         type="int" indexed="true" stored="true" required="true" /> 
+   <uniqueKey>guid</uniqueKey> 
    
-   <field name="guid"         type="string" indexed="true" stored="false" required="true" /> 
-   <field name="title"        type="text_general" indexed="true" stored="true" />
-   <field name="description"  type="text_general" indexed="true" stored="true" />
+   <field name="title_en"        type="text_general" indexed="true" stored="true" />
+   <field name="title_fr"        type="text_general" indexed="true" stored="true" />
+   <field name="description_en"  type="text_general" indexed="true" stored="true" />
+   <field name="description_fr"  type="text_general" indexed="true" stored="true" />
    <field name="type"         type="text_general" indexed="true" stored="true" />
    <field name="subtype"      type="text_general" indexed="true" stored="true" />
    <field name="access_id"    type="int" indexed="true" stored="true" />
 
-   <!-- both groups and users do not follow the same architecture as object types -->
+   <field name="name_en"      type="text_general" indexed="true" stored="true" />
+   <field name="name_fr"      type="text_general" indexed="true" stored="true" />
+   
    <field name="name"         type="text_general" indexed="true" stored="true" />
    <field name="username"     type="text_general" indexed="true" stored="true" />
    <field name="email"        type="text_general" indexed="true" stored="true" />
 
+   <field name="text_en"      type="text_general" indexed="true" stored="true" />
+   <field name="text_fr"      type="text_general" indexed="true" stored="true" />
+
+   <field name="date_created"      type="date" indexed="true" stored="true" />
+   <field name="date_modified"     type="date" indexed="true" stored="true" />
+
+   <field name="url"          type="text_general" indexed="true" stored="true" />
+
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
 
    <!-- Dynamic field definitions allow using convention over configuration
        for fields via the specification of patterns to match field names. 
